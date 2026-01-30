@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Frontend
+Bundle-SymbolicName: frontend
+Bundle-Version: 1.0.0.qualifier
+Require-Bundle: api;bundle-version="1.0.0",
+ org.osgi.service.component.annotations;bundle-version="1.5.1"
+Service-Component: OSGI-INF/frontend.UI.xml
+Automatic-Module-Name: frontend
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-21

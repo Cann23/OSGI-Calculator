@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="start" immediate="true" name="backend.DataServiceImpl">
+   <service>
+      <provide interface="api.DataService"/>
+   </service>
+   <implementation class="backend.DataServiceImpl"/>
+</scr:component>
