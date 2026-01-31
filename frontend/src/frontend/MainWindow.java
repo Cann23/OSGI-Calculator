@@ -186,7 +186,8 @@ public class MainWindow extends JFrame {
 			break;
 		}
 		
-		output.setText(String.valueOf(result));
+		output.setText(dataService.convertIntegerToString((int) result,
+		        			(String) languageSelector.getSelectedItem()));
 	}
 	
 	public String getInput1() {

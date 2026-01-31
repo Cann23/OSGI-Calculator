@@ -30,6 +30,41 @@ public class TurkishNumbers implements NumberLanguage {
 	        Map.entry("bin", 1000),
 	        Map.entry("milyon", 1_000_000)
 	    );
+	
+	private static final String[] units = {
+        "sıfır","bir","iki","üç","dört","beş","altı","yedi","sekiz","dokuz"
+    };
+
+    private static final String[] tens = {
+        "", "on","yirmi","otuz","kırk","elli",
+        "altmış","yetmiş","seksen","doksan"
+    };
+
+    public String toString(int number) {
+    	boolean negative = false;
+    	String result;
+    	
+    	if (number == 0) {
+    		return String.valueOf(number);
+    	}
+    	
+    	if (number < 0) {
+    		negative = true;
+    		number *= -1;
+    	}
+    	
+        if (number < 10) {
+        	result =  units[number];
+        }
+        if (number < 100) {
+        	result =  tens[number / 10] +
+                   (number % 10 != 0 ? " " + units[number % 10] : "");
+        } else {
+        	result = String.valueOf(number);
+        }
+        
+        return negative ? "eksi " + result : result;
+    }
 
 	@Override
 	public Integer getValue(String textNumber) {

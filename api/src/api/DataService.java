@@ -5,4 +5,6 @@ public interface DataService {
 	String getData();
 
 	int convertStringToInteger(String textNumber, String language);
+	
+	String convertIntegerToString(int number, String language);
 }
