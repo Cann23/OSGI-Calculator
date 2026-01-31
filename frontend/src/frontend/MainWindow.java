@@ -38,7 +38,7 @@ public class MainWindow extends JFrame {
 	public MainWindow(DataService dataService) {
 		this.dataService = dataService;
 		
-		// detect system language
+		// detect system language		
 		currentLocale = Locale.getDefault();
 		if (!currentLocale.getLanguage().equals("en")) {
 			currentLocale = new Locale("tr", "TR");

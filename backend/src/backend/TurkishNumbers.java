@@ -49,7 +49,7 @@ public class TurkishNumbers implements NumberLanguage {
         if (number >= 1_000_000) {
             int millions = number / 1_000_000;
             if (millions > 1) sb.append(toWords(millions)).append(" milyon");
-            else sb.append("bir milyon"); // bir milyon must be spoken
+            else sb.append("bir milyon");
             number %= 1_000_000;
             if (number > 0) sb.append(" ");
         }
@@ -57,7 +57,7 @@ public class TurkishNumbers implements NumberLanguage {
         if (number >= 1000) {
             int thousands = number / 1000;
             if (thousands > 1) sb.append(toWords(thousands)).append(" bin");
-            else sb.append("bin"); // bir bin is NOT spoken
+            else sb.append("bin");
             number %= 1000;
             if (number > 0) sb.append(" ");
         }
@@ -65,7 +65,7 @@ public class TurkishNumbers implements NumberLanguage {
         if (number >= 100) {
             int hundreds = number / 100;
             if (hundreds > 1) sb.append(toWords(hundreds)).append(" yüz");
-            else sb.append("yüz"); // bir yüz is NOT spoken
+            else sb.append("yüz");
             number %= 100;
             if (number > 0) sb.append(" ");
         }
