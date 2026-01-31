@@ -4,5 +4,5 @@ public interface DataService {
 
 	String getData();
 
-	int convertStringToInteger(String textNumber);
+	int convertStringToInteger(String textNumber, String language);
 }
