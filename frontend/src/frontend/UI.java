@@ -18,7 +18,7 @@ public class UI {
 		System.out.println("Frontend activated");
 		
 		SwingUtilities.invokeLater(() -> {
-			new MainWindow(dataService.getData()).setVisible(true);
+			new MainWindow(dataService).setVisible(true);
 		});
 	}
 	

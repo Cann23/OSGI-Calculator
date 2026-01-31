@@ -15,7 +15,12 @@ public class DataServiceImpl implements DataService {
 
 	@Override
 	public String getData() {
-		return "hi from backend";
+		return "Please enter the values";
+	}
+	
+	@Override
+	public int convertStringToInteger(String textNumber) {
+		return 5;
 	}
 
 }
