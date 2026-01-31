@@ -157,37 +157,41 @@ public class MainWindow extends JFrame {
 	}
 	
 	private void calculation(char operation, JComboBox<String> languageSelector) {
-		String text1 = getInput1();
-		String text2 = getInput2();
+		try {
+			String text1 = getInput1();
+			String text2 = getInput2();
+			
+			String selectedLanguage = (String) languageSelector.getSelectedItem();
 		
-		String selectedLanguage = (String) languageSelector.getSelectedItem();
-	
-		int num1 = dataService.convertStringToInteger(text1, selectedLanguage);
-		int num2 = dataService.convertStringToInteger(text2, selectedLanguage);
-		
-		double result = 0;
-		
-		switch (operation) {
-		case '+':
-			result = num1 + num2;
-			break;
-		case '-':
-			result = num1 - num2;
-			break;
-		case '*':
-			result = num1 * num2;
-			break;
-		case '/':
-			if (num2 == 0) {
-				output.setText("Cannot divide by zero");
-				return;
+			int num1 = dataService.convertStringToInteger(text1, selectedLanguage);
+			int num2 = dataService.convertStringToInteger(text2, selectedLanguage);
+			
+			int result = 0;
+			
+			switch (operation) {
+			case '+':
+				result = num1 + num2;
+				break;
+			case '-':
+				result = num1 - num2;
+				break;
+			case '*':
+				result = num1 * num2;
+				break;
+			case '/':
+				if (num2 == 0) {
+					output.setText(messages.getString("error.divide.zero"));
+					return;
+				}
+				result = num1 / num2;				
+				break;
 			}
-			result = num1 / num2;
-			break;
-		}
+			
+			output.setText(dataService.convertIntegerToString(result, selectedLanguage));
 		
-		output.setText(dataService.convertIntegerToString((int) result,
-		        			(String) languageSelector.getSelectedItem()));
+		} catch (IllegalArgumentException ex) {
+			output.setText("Error: " + ex.getMessage());
+		}
 	}
 	
 	public String getInput1() {

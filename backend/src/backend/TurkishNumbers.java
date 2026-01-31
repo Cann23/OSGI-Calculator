@@ -40,30 +40,37 @@ public class TurkishNumbers implements NumberLanguage {
         "altmış","yetmiş","seksen","doksan"
     };
 
-    public String toString(int number) {
-    	boolean negative = false;
-    	String result;
-    	
-    	if (number == 0) {
-    		return String.valueOf(number);
-    	}
-    	
-    	if (number < 0) {
-    		negative = true;
-    		number *= -1;
-    	}
-    	
-        if (number < 10) {
-        	result =  units[number];
+    public String toWords(int number) {
+        if (number == 0) return "sıfır";
+        if (number < 0) return "eksi " + toWords(-number);
+
+        StringBuilder sb = new StringBuilder();
+
+        if (number >= 1_000_000) {
+            sb.append(toWords(number / 1_000_000)).append(" milyon");
+            number %= 1_000_000;
+            if (number > 0) sb.append(" ");
         }
-        if (number < 100) {
-        	result =  tens[number / 10] +
-                   (number % 10 != 0 ? " " + units[number % 10] : "");
-        } else {
-        	result = String.valueOf(number);
+        if (number >= 1000) {
+            sb.append(toWords(number / 1000)).append(" bin");
+            number %= 1000;
+            if (number > 0) sb.append(" ");
         }
-        
-        return negative ? "eksi " + result : result;
+        if (number >= 100) {
+            sb.append(toWords(number / 100)).append(" yüz");
+            number %= 100;
+            if (number > 0) sb.append(" ");
+        }
+        if (number >= 10) {
+            sb.append(tens[number / 10]);
+            number %= 10;
+            if (number > 0) sb.append(" ");
+        }
+        if (number > 0) {
+            sb.append(units[number]);
+        }
+
+        return sb.toString().trim();
     }
 
 	@Override

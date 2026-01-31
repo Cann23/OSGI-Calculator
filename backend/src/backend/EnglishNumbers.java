@@ -54,30 +54,41 @@ public class EnglishNumbers implements NumberLanguage {
         "sixty","seventy","eighty","ninety"
     };
 
-    public String toString(int number) {
-    	if (number == 0) {
-    		return String.valueOf(number);
-    	}
-    	
-    	boolean negative = false;
-    	String result;
-    	
-    	if (number < 0) {
-    		negative = true;
-    		number *= -1;
-    	}
-    	
-        if (number < 10) {
-        	result =  units[number];
+    public String toWords(int number) {
+        if (number == 0) return "zero";
+        if (number < 0) return "minus " + toWords(-number);
+
+        StringBuilder sb = new StringBuilder();
+
+        if (number >= 1_000_000) {
+            sb.append(toWords(number / 1_000_000)).append(" million");
+            number %= 1_000_000;
+            if (number > 0) sb.append(" ");
         }
-        if (number < 100) {
-        	result =  tens[number / 10] +
-                   (number % 10 != 0 ? " " + units[number % 10] : "");
-        } else {
-        	result = String.valueOf(number);
+        if (number >= 1000) {
+            sb.append(toWords(number / 1000)).append(" thousand");
+            number %= 1000;
+            if (number > 0) sb.append(" ");
         }
-        
-        return negative ? "minus " + result : result;
+        if (number >= 100) {
+            sb.append(toWords(number / 100)).append(" hundred");
+            number %= 100;
+            if (number > 0) sb.append(" ");
+        }
+        if (number >= 20) {
+            sb.append(tens[number / 10]);
+            number %= 10;
+            if (number > 0) sb.append(" ");
+        }
+        if (number >= 10) {
+            sb.append(teens[number - 10]);
+            number = 0;
+        }
+        if (number > 0) {
+            sb.append(units[number]);
+        }
+
+        return sb.toString().trim();
     }
 
 	@Override

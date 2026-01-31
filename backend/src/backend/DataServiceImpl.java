@@ -74,12 +74,16 @@ public class DataServiceImpl implements DataService {
 	@Override
 	public String convertIntegerToString(int number, String language) {
 		
-		NumberLanguage lang;
+		NumberLanguage numberLanguage = languagesMap.get(language);
+		
+		if (numberLanguage == null) {
+			throw new IllegalArgumentException("Unsupported language: " + language);
+		}
 
-	    if (language.equalsIgnoreCase("English")) {
-	        return ((EnglishNumbers) new EnglishNumbers()).toString(number);
+		if (language.equalsIgnoreCase("English")) {
+	        return ((EnglishNumbers) numberLanguage).toWords(number);
 	    } else if (language.equalsIgnoreCase("Türkçe")) {
-	        return ((TurkishNumbers) new TurkishNumbers()).toString(number);
+	        return ((TurkishNumbers) numberLanguage).toWords(number);
 	    } else {
 	        throw new IllegalArgumentException("Unsupported language");
 	    }
