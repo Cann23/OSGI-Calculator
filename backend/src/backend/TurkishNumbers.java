@@ -47,25 +47,35 @@ public class TurkishNumbers implements NumberLanguage {
         StringBuilder sb = new StringBuilder();
 
         if (number >= 1_000_000) {
-            sb.append(toWords(number / 1_000_000)).append(" milyon");
+            int millions = number / 1_000_000;
+            if (millions > 1) sb.append(toWords(millions)).append(" milyon");
+            else sb.append("bir milyon"); // bir milyon must be spoken
             number %= 1_000_000;
             if (number > 0) sb.append(" ");
         }
+
         if (number >= 1000) {
-            sb.append(toWords(number / 1000)).append(" bin");
+            int thousands = number / 1000;
+            if (thousands > 1) sb.append(toWords(thousands)).append(" bin");
+            else sb.append("bin"); // bir bin is NOT spoken
             number %= 1000;
             if (number > 0) sb.append(" ");
         }
+
         if (number >= 100) {
-            sb.append(toWords(number / 100)).append(" yüz");
+            int hundreds = number / 100;
+            if (hundreds > 1) sb.append(toWords(hundreds)).append(" yüz");
+            else sb.append("yüz"); // bir yüz is NOT spoken
             number %= 100;
             if (number > 0) sb.append(" ");
         }
+
         if (number >= 10) {
             sb.append(tens[number / 10]);
             number %= 10;
             if (number > 0) sb.append(" ");
         }
+
         if (number > 0) {
             sb.append(units[number]);
         }
