@@ -1,12 +1,15 @@
 package backend;
 
 import java.util.Map;
+import java.util.NavigableMap;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import api.NumberLanguage;
 
 public class TurkishNumbers implements NumberLanguage {
 	
-	private static final Map<String, Integer> turkishMap = Map.ofEntries(
+	private static final Map<String, Integer> turkishWordToNumberMap = Map.ofEntries(
 	        Map.entry("sıfır", 0),
 	        Map.entry("bir", 1),
 	        Map.entry("iki", 2),
@@ -39,6 +42,19 @@ public class TurkishNumbers implements NumberLanguage {
         "", "on","yirmi","otuz","kırk","elli",
         "altmış","yetmiş","seksen","doksan"
     };
+    
+    // int -> word
+    private static final Map<Integer, String> numberToWord =
+		turkishWordToNumberMap.entrySet()
+              .stream()
+              .collect(Collectors.toMap(Map.Entry::getValue,Map.Entry::getKey));
+    
+    private static final NavigableMap<Integer, String> SCALE_MAP =
+            new TreeMap<>(Map.of(
+                    1_000_000, "milyon",
+                    1_000, "bin",
+                    100, "yüz"
+            )).descendingMap();
 
     public String toWords(int number) {
         if (number == 0) return "sıfır";
@@ -46,38 +62,39 @@ public class TurkishNumbers implements NumberLanguage {
 
         StringBuilder sb = new StringBuilder();
 
-        if (number >= 1_000_000) {
-            int millions = number / 1_000_000;
-            if (millions > 1) sb.append(toWords(millions)).append(" milyon");
-            else sb.append("bir milyon");
-            number %= 1_000_000;
-            if (number > 0) sb.append(" ");
+        // scale values (SCALE_MAP)
+        for (var entry : SCALE_MAP.entrySet()) {
+            int value = entry.getKey();
+            String scaleWord = entry.getValue();
+
+            if (number >= value) {
+                int quotient = number / value;
+
+                // not to say bir yüz, bir bin
+                if (!(quotient == 1 && value != 1_000_000)) {
+                    sb.append(toWords(quotient)).append(" ");
+                }
+
+                sb.append(scaleWord);
+                
+                number %= value;
+                if (number > 0) sb.append(" ");
+            }
         }
 
-        if (number >= 1000) {
-            int thousands = number / 1000;
-            if (thousands > 1) sb.append(toWords(thousands)).append(" bin");
-            else sb.append("bin");
-            number %= 1000;
-            if (number > 0) sb.append(" ");
-        }
-
-        if (number >= 100) {
-            int hundreds = number / 100;
-            if (hundreds > 1) sb.append(toWords(hundreds)).append(" yüz");
-            else sb.append("yüz");
-            number %= 100;
-            if (number > 0) sb.append(" ");
-        }
-
-        if (number >= 10) {
-            sb.append(tens[number / 10]);
-            number %= 10;
-            if (number > 0) sb.append(" ");
-        }
-
+        // direct lookup (0-19, 20, 30, 40, ..., 90)
         if (number > 0) {
-            sb.append(units[number]);
+            if (numberToWord.containsKey(number)) {
+                sb.append(numberToWord.get(number));
+            } else {
+                int tens = (number / 10) * 10;
+                int units = number % 10;
+
+                sb.append(numberToWord.get(tens));
+                if (units > 0) {
+                    sb.append(" ").append(numberToWord.get(units));
+                }
+            }
         }
 
         return sb.toString().trim();
@@ -85,7 +102,7 @@ public class TurkishNumbers implements NumberLanguage {
 
 	@Override
 	public Integer getValue(String textNumber) {
-		return turkishMap.get(textNumber);
+		return turkishWordToNumberMap.get(textNumber);
 	}
 
 }
