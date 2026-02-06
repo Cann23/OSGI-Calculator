@@ -151,6 +151,8 @@ public class MainWindow extends JFrame {
 		divideButton.setText(messages.getString("button.divide"));
 		
 		output.setText("");
+		number1.setText("");
+		number2.setText("");
 		
 		revalidate();
 		repaint();
