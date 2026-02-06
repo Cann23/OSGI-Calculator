@@ -42,20 +42,6 @@ public class EnglishNumbers implements NumberLanguage {
         Map.entry("thousand", 1000),
         Map.entry("million", 1_000_000)
     );
-		
-	private static final String[] units = {
-        "zero","one","two","three","four","five","six","seven","eight","nine"
-    };
-
-    private static final String[] teens = {
-        "ten","eleven","twelve","thirteen","fourteen","fifteen",
-        "sixteen","seventeen","eighteen","nineteen"
-    };
-
-    private static final String[] tens = {
-        "", "", "twenty","thirty","forty","fifty",
-        "sixty","seventy","eighty","ninety"
-    };
     
     private static final NavigableMap<Integer, String> SCALE_MAP =
         new TreeMap<>(Map.of(

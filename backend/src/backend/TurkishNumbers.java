@@ -33,15 +33,6 @@ public class TurkishNumbers implements NumberLanguage {
 	        Map.entry("bin", 1000),
 	        Map.entry("milyon", 1_000_000)
 	    );
-	
-	private static final String[] units = {
-        "sıfır","bir","iki","üç","dört","beş","altı","yedi","sekiz","dokuz"
-    };
-
-    private static final String[] tens = {
-        "", "on","yirmi","otuz","kırk","elli",
-        "altmış","yetmiş","seksen","doksan"
-    };
     
     // int -> word
     private static final Map<Integer, String> numberToWord =
