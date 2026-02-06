@@ -20,11 +20,6 @@ public class DataServiceImpl implements DataService {
     void start() {
         System.out.println("Backend service activated");
     }
-
-	@Override
-	public String getData() {
-		return "Please enter the values";
-	}
 	
 	@Override
 	public int convertStringToInteger(String textNumber, String language) {
