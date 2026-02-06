@@ -42,7 +42,7 @@ public class EnglishNumbers implements NumberLanguage {
         Map.entry("thousand", 1000),
         Map.entry("million", 1_000_000)
     );
-	
+		
 	private static final String[] units = {
         "zero","one","two","three","four","five","six","seven","eight","nine"
     };
@@ -71,50 +71,30 @@ public class EnglishNumbers implements NumberLanguage {
           .stream()
           .collect(Collectors.toMap(Map.Entry::getValue,Map.Entry::getKey));
 
+    @Override
+    public Map<Integer, String> getNumberToWordMap() {
+        return numberToWordMap;
+    }
 
-    public String toWords(int number) {
-    	
-        if (number == 0) return "zero";
-        if (number < 0) return "minus " + toWords(-number);
-
-        StringBuilder sb = new StringBuilder();
-        
-        // scale values (SCALE_MAP)
-        for (var entry : SCALE_MAP.entrySet()) {
-            int value = entry.getKey();
-            String word = entry.getValue();
-
-            if (number >= value) {
-                sb.append(toWords(number / value))
-                  .append(" ")
-                  .append(word);
-
-                number %= value;
-                if (number > 0) sb.append(" ");
-            }
-        }
-        
-        // direct lookup (0-19, 20, 30, 40, ..., 90)
-        if (number > 0) {
-            if (numberToWordMap.containsKey(number)) {
-                sb.append(numberToWordMap.get(number));
-            } else {
-                int tens = (number / 10) * 10;
-                int units = number % 10;
-
-                sb.append(numberToWordMap.get(tens));
-                if (units > 0) {
-                    sb.append(" ").append(numberToWordMap.get(units));
-                }
-            }
-        }
-
-        return sb.toString().trim();
+    @Override
+    public NavigableMap<Integer, String> getScaleMap() {
+        return SCALE_MAP;
+    }
+    
+    @Override
+    public boolean omitOneBeforeScale(int scale) {
+        return false;
     }
 
 	@Override
 	public Integer getValue(String textNumber) {
 		return englishWordToNumberMap.get(textNumber);
 	}
+	
+	@Override
+	public String getNegativeWord() {
+	    return "minus";
+	}
+
 
 }

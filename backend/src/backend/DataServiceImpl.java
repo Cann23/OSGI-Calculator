@@ -75,14 +75,59 @@ public class DataServiceImpl implements DataService {
 			throw new IllegalArgumentException("Unsupported language: " + language);
 		}
 
-		if (language.equalsIgnoreCase("English")) {
-	        return ((EnglishNumbers) numberLanguage).toWords(number);
-	    } else if (language.equalsIgnoreCase("Türkçe")) {
-	        return ((TurkishNumbers) numberLanguage).toWords(number);
-	    } else {
-	        throw new IllegalArgumentException("Unsupported language");
-	    }
+		return convert(number, numberLanguage);
 	    
+	}
+	
+	private String convert(int number, NumberLanguage lang) {
+
+	    if (number == 0) {
+	        return lang.getNumberToWordMap().get(0);
+	    }
+
+	    if (number < 0) {
+	        return lang.getNegativeWord() + " " + convert(-number, lang);
+	    }
+
+	    StringBuilder sb = new StringBuilder();
+	    
+	    // scale values (SCALE_MAP)
+	    for (var entry : lang.getScaleMap().entrySet()) {
+	        int value = entry.getKey();
+	        String scaleWord = entry.getValue();
+
+	        if (number >= value) {
+	            int quotient = number / value;
+
+	            if (!(quotient == 1 && lang.omitOneBeforeScale(value))) {
+	                sb.append(convert(quotient, lang)).append(" ");
+	            }
+
+	            sb.append(scaleWord);
+
+	            number %= value;
+	            if (number > 0) sb.append(" ");
+	        }
+	    }
+
+	    Map<Integer, String> numberToWordMap = lang.getNumberToWordMap();
+
+	    // direct lookup (0-19, 20, 30, 40, ..., 90)
+	    if (number > 0) {
+	        if (numberToWordMap.containsKey(number)) {
+	            sb.append(numberToWordMap.get(number));
+	        } else {
+	            int tens = (number / 10) * 10;
+	            int units = number % 10;
+
+	            sb.append(numberToWordMap.get(tens));
+	            if (units > 0) {
+	                sb.append(" ").append(numberToWordMap.get(units));
+	            }
+	        }
+	    }
+
+	    return sb.toString().trim();
 	}
 
 }

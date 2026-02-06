@@ -56,53 +56,30 @@ public class TurkishNumbers implements NumberLanguage {
                     100, "yüz"
             )).descendingMap();
 
-    public String toWords(int number) {
-        if (number == 0) return "sıfır";
-        if (number < 0) return "eksi " + toWords(-number);
+    @Override
+    public Map<Integer, String> getNumberToWordMap() {
+        return numberToWord;
+    }
 
-        StringBuilder sb = new StringBuilder();
-
-        // scale values (SCALE_MAP)
-        for (var entry : SCALE_MAP.entrySet()) {
-            int value = entry.getKey();
-            String scaleWord = entry.getValue();
-
-            if (number >= value) {
-                int quotient = number / value;
-
-                // not to say bir yüz, bir bin
-                if (!(quotient == 1 && value != 1_000_000)) {
-                    sb.append(toWords(quotient)).append(" ");
-                }
-
-                sb.append(scaleWord);
-                
-                number %= value;
-                if (number > 0) sb.append(" ");
-            }
-        }
-
-        // direct lookup (0-19, 20, 30, 40, ..., 90)
-        if (number > 0) {
-            if (numberToWord.containsKey(number)) {
-                sb.append(numberToWord.get(number));
-            } else {
-                int tens = (number / 10) * 10;
-                int units = number % 10;
-
-                sb.append(numberToWord.get(tens));
-                if (units > 0) {
-                    sb.append(" ").append(numberToWord.get(units));
-                }
-            }
-        }
-
-        return sb.toString().trim();
+    @Override
+    public NavigableMap<Integer, String> getScaleMap() {
+        return SCALE_MAP;
+    }
+    
+    @Override
+    public boolean omitOneBeforeScale(int scale) {
+        return scale == 100 || scale == 1000;
     }
 
 	@Override
 	public Integer getValue(String textNumber) {
 		return turkishWordToNumberMap.get(textNumber);
 	}
+	
+	@Override
+	public String getNegativeWord() {
+	    return "eksi";
+	}
+
 
 }
